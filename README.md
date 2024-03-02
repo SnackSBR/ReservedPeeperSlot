@@ -1,2 +1,3 @@
-# LethalCompanyTemplate
-A template for a BepInEx 5 Plugin, using the correct .csproj configuration for Lethal Company modding
+# ReservedPeeperSlot
+<strong>Requires: <a href="https://thunderstore.io/c/lethal-company/p/FlipMods/ReservedItemSlotCore/">ReservedItemSlotCore</a></strong>, <a href="https://thunderstore.io/c/lethal-company/p/malco/Lategame_Upgrades/">LateGameUpgrades</a></strong> and, optionally, <a href="https://thunderstore.io/c/lethal-company/p/Rune580/LethalCompany_InputUtils/">LethalCompany InputUtils</a> (recommended)</strong><br><br>
+Dedicated slot for the Peeper. You can press G to activate and drop the Peeper on the ground.

@@ -1,0 +1,11 @@
+{
+    "name": "ReservedPeeperSlot",
+    "version_number": "1.0.0",
+    "website_url": "https://github.com/SnackSBR/ReservedPeeperSlot",
+    "description": "Dedicated slot for the Radar Booster.",
+    "dependencies": [
+        "BepInEx-BepInExPack-5.4.2100",
+        "FlipMods-ReservedItemSlotCore-1.8.9",
+		"malco-Lategame_Upgrades-3.3.0"
+    ]
+}
