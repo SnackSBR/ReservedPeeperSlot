@@ -6,6 +6,7 @@ using System.Collections;
 using ReservedItemSlotCore.Patches;
 using ReservedItemSlotCore;
 using ReservedPeeperSlot.Compat;
+using System;
 
 namespace ReservedPeeperSlot.Input
 {
@@ -69,27 +70,37 @@ namespace ReservedPeeperSlot.Input
                 return;
             }
 
-            ReservedItemInfo radar = Plugin.PeeperInfo;
+            ReservedItemInfo peeper = Plugin.PeeperInfo;
 
             ReservedItemSlotCore.Input.Keybinds.holdingModifierKey = true;
 
-            if (!ReservedItemPatcher.IsItemSlotEmpty(radar, LocalPlayerController) && ReservedItemPatcher.CanSwapToReservedHotbarSlot())
+            if (!ReservedItemPatcher.IsItemSlotEmpty(peeper, LocalPlayerController) && ReservedItemPatcher.CanSwapToReservedHotbarSlot())
             {
-                LocalPlayerController.StartCoroutine(ShuffleItems(radar));
+                try
+                {
+                    LocalPlayerController.StartCoroutine(ShuffleItems(peeper));
+                }
+                catch (Exception ex)
+                {
+                    Plugin.mls.LogError(ex.Message);
+                    Plugin.mls.LogError(ex.StackTrace);
+                    HUDManager.Instance.chatText.text += $"Error when dropping ${peeper.itemName}";
+                }
             }
+
+            ReservedItemSlotCore.Input.Keybinds.holdingModifierKey = false;
+            ReservedItemPatcher.FocusReservedHotbarSlots(false);
         }
 
-        private static IEnumerator ShuffleItems(ReservedItemInfo radar)
+        private static IEnumerator ShuffleItems(ReservedItemInfo peeper)
         {
             ReservedPlayerData reservedPlayerData = PlayerPatcher.playerDataLocal;
             ReservedItemPatcher.FocusReservedHotbarSlots(true);
             yield return new WaitForSeconds(0.1f);
-            ReservedItemPatcher.SwitchToItemSlot(LocalPlayerController, reservedPlayerData.reservedHotbarStartIndex + radar.reservedItemIndex, null);
+            ReservedItemPatcher.SwitchToItemSlot(LocalPlayerController, reservedPlayerData.reservedHotbarStartIndex + peeper.reservedItemIndex, null);
             yield return new WaitForSeconds(0.1f);
             LocalPlayerController.DiscardHeldObject();
             yield return new WaitForSeconds(0.1f);
-            ReservedItemSlotCore.Input.Keybinds.holdingModifierKey = false;
-            ReservedItemPatcher.FocusReservedHotbarSlots(false);
         }
     }
 }
