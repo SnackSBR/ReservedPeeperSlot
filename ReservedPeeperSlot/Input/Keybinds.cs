@@ -74,7 +74,7 @@ namespace ReservedPeeperSlot.Input
 
             ReservedItemSlotCore.Input.Keybinds.holdingModifierKey = true;
 
-            if (ReservedItemPatcher.reservedHotbarSize > 0 && !ReservedItemPatcher.IsItemSlotEmpty(peeper, LocalPlayerController) && ReservedItemPatcher.CanSwapToReservedHotbarSlot())
+            if (!ReservedItemPatcher.IsItemSlotEmpty(peeper, LocalPlayerController) && ReservedItemPatcher.CanSwapToReservedHotbarSlot())
             {
                 try
                 {
