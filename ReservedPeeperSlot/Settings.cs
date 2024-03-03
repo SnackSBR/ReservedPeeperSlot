@@ -10,7 +10,7 @@ namespace ReservedPeeperSlot
         public static ConfigEntry<bool> DeployPeeper;
         public static void Init()
         {
-            DeployPeeperKey = Plugin.Instance.Config.Bind("ReservedPeeperSlot", "DropPeeperKey", "<Keyboard>/g", "Keybind to drop the Peeper on the ground. (will be ignored if InputUtils is present)");
+            DeployPeeperKey = Plugin.Instance.Config.Bind("ReservedPeeperSlot", "DropPeeperKey", "<Keyboard>/t", "Keybind to drop the Peeper on the ground. (will be ignored if InputUtils is present)");
             DeployPeeper = Plugin.Instance.Config.Bind("ReservedPeeperSlot", "DeployPeeper", true, "Enable the keybind drop the Peeper.");
 
             ConfigEntries.Add(DeployPeeperKey.Definition.Key, DeployPeeperKey);

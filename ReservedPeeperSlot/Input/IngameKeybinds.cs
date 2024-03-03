@@ -15,7 +15,7 @@ namespace ReservedPeeperSlot.Input
             return Instance.Asset;
         }
 
-        [InputAction("<Keyboard>/g", Name = "[ReservedPeeperSlot]\nDrop Peeper")]
+        [InputAction("<Keyboard>/t", Name = "[ReservedPeeperSlot]\nDrop Peeper")]
         public InputAction DropPeeperAction { get; set; }
     }
 }
