@@ -7,6 +7,8 @@ using ReservedItemSlotCore.Patches;
 using ReservedItemSlotCore;
 using ReservedPeeperSlot.Compat;
 using System;
+using ReservedItemSlotCore.Data;
+using System.Collections.Generic;
 
 namespace ReservedPeeperSlot.Input
 {
@@ -70,37 +72,35 @@ namespace ReservedPeeperSlot.Input
                 return;
             }
 
-            ReservedItemInfo peeper = Plugin.PeeperInfo;
-
-            ReservedItemSlotCore.Input.Keybinds.holdingModifierKey = true;
-
-            if (!ReservedItemPatcher.IsItemSlotEmpty(peeper, LocalPlayerController) && ReservedItemPatcher.CanSwapToReservedHotbarSlot())
+            try
             {
-                try
+                if (SessionManager.unlockedReservedItemSlotsDict.TryGetValue(Plugin.PeeperSlot.slotName, out var PeeperSlot))
                 {
-                    LocalPlayerController.StartCoroutine(ShuffleItems(peeper));
-                }
-                catch (Exception ex)
-                {
-                    Plugin.mls.LogError(ex.Message);
-                    Plugin.mls.LogError(ex.StackTrace);
-                    HUDManager.Instance.chatText.text += $"Error when dropping ${peeper.itemName}";
+                    List<ReservedItemSlotData> focusReservedItemSlots = [PeeperSlot];
+                    if (focusReservedItemSlots.Count > 0)
+                    {
+                        ReservedHotbarManager.ForceToggleReservedHotbar(focusReservedItemSlots.ToArray());
+                        LocalPlayerController.StartCoroutine(ShuffleItems());
+                    }
                 }
             }
-
-            ReservedItemSlotCore.Input.Keybinds.holdingModifierKey = false;
-            ReservedItemPatcher.FocusReservedHotbarSlots(false);
+            catch (Exception ex)
+            {
+                Plugin.mls.LogError(ex.Message);
+                Plugin.mls.LogError(ex.StackTrace);
+                HUDManager.Instance.chatText.text += $"Error when dropping Peeper";
+            }
         }
 
-        private static IEnumerator ShuffleItems(ReservedItemInfo peeper)
+        private static IEnumerator ShuffleItems()
         {
-            ReservedPlayerData reservedPlayerData = PlayerPatcher.playerDataLocal;
-            ReservedItemPatcher.FocusReservedHotbarSlots(true);
+            yield return new WaitForSeconds(0.2f);
+            if(LocalPlayerController.currentlyHeldObjectServer != null)
+            {
+                LocalPlayerController.DiscardHeldObject();
+            }
             yield return new WaitForSeconds(0.1f);
-            ReservedItemPatcher.SwitchToItemSlot(LocalPlayerController, reservedPlayerData.reservedHotbarStartIndex + peeper.reservedItemIndex, null);
-            yield return new WaitForSeconds(0.1f);
-            LocalPlayerController.DiscardHeldObject();
-            yield return new WaitForSeconds(0.1f);
+            ReservedHotbarManager.FocusReservedHotbarSlots(false);
         }
     }
 }

@@ -2,6 +2,8 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using ReservedItemSlotCore;
+using ReservedItemSlotCore.Config;
+using ReservedItemSlotCore.Data;
 using ReservedPeeperSlot.Compat;
 using System;
 using System.Collections.Generic;
@@ -19,13 +21,19 @@ namespace ReservedPeeperSlot
         public static Plugin Instance;
         readonly Harmony harmony = new(Metadata.GUID);
         internal static readonly ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(Metadata.NAME);
-        public static ReservedItemInfo PeeperInfo = new("Peeper", 668, false, false, false, false);
+        public static ReservedItemSlotData PeeperSlot;
+        public static ReservedItemData PeeperItemData;
 
         private void Awake()
         {
             Instance = this;
 
             Settings.Init();
+
+            PeeperItemData = new("Peeper");
+            PeeperSlot = ReservedItemSlotData.CreateReservedItemSlotData("PeeperSlot", 668, 100);
+            PeeperSlot.purchasePrice = Settings.PeeperPrice.Value;
+            PeeperSlot.AddItemToReservedItemSlot(PeeperItemData);
 
             IEnumerable<Type> types;
             try
